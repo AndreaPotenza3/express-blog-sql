@@ -16,15 +16,24 @@ function index(req, res) {
 // SHOW
 
 function show(req, res) {
-    const id = parseInt(req.params.id)
-    const post = postsList.find(post => post.id === id);
-    if (!post) {
-        return res.json({
-            error: "Not Found",
-            message: "Post non trovato"
-        })
-    }
-    res.json(post)
+
+    const { id } = req.params
+    const sql = 'SELECT * FROM posts WHERE id = ?'
+
+    connection.query(sql, [id], (err, results) => {
+        if (err) return res.status(500).json({ error: 'query errata' })
+        if (results.length === 0) return res.status(404).json({ error: 'post non trovato' })
+        res.json(results[0])
+    })
+    // const id = parseInt(req.params.id)
+    // const post = postsList.find(post => post.id === id);
+    // if (!post) {
+    //     return res.json({
+    //         error: "Not Found",
+    //         message: "Post non trovato"
+    //     })
+    // }
+    // res.json(post)
 }
 
 // STORE
