@@ -1,5 +1,7 @@
 const postsList = require('../data/posts')
 let lastIndex = postsList.at(-1).id
+
+const connection = require('../data/db.js')
 // INDEX
 
 function index(req, res) {
@@ -11,19 +13,19 @@ function index(req, res) {
 function show(req, res) {
     const id = parseInt(req.params.id)
     const post = postsList.find(post => post.id === id);
-    if(!post){
+    if (!post) {
         return res.json({
-        error: "Not Found",
-        message: "Post non trovato"
+            error: "Not Found",
+            message: "Post non trovato"
         })
-        }
+    }
     res.json(post)
 }
 
 // STORE
 
 function store(req, res) {
-    lastIndex ++
+    lastIndex++
     const newPost = {
         id: lastIndex,
         title: req.body.title,
@@ -43,7 +45,7 @@ function store(req, res) {
 function update(req, res) {
     const id = parseInt(req.params.id)
     const post = postsList.find(post => post.id === id);
-    const {title, slug, image, content, tags} = req.body
+    const { title, slug, image, content, tags } = req.body
     post.title = title
     post.image = image
     post.content = content
@@ -60,20 +62,20 @@ function update(req, res) {
 function modify(req, res) {
     const id = parseInt(req.params.id)
     const post = postsList.find(post => post.id === id)
-    const {title, slug, image, content, tags} = req.body
-    if(title)
+    const { title, slug, image, content, tags } = req.body
+    if (title)
         post.title = title
 
-    if(image)
+    if (image)
         post.image = image
-    
-    if(content)
+
+    if (content)
         post.content = content
 
-    if(slug)
+    if (slug)
         post.slug = slug
 
-    if(tags)
+    if (tags)
         post.tags = tags
 
     // res.send(`Modificato il post con id ${id}`)
@@ -86,11 +88,11 @@ function modify(req, res) {
 function destroy(req, res) {
     const id = parseInt(req.params.id)
     const postIndex = postsList.findIndex((post) => post.id === id)
-    
-    if(postIndex === -1) {
+
+    if (postIndex === -1) {
         res.status(404)
         return res.json({
-            error:  "Post not found",
+            error: "Post not found",
             message: "Post non trovato"
         })
     }
