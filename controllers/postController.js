@@ -5,7 +5,13 @@ const connection = require('../data/db.js')
 // INDEX
 
 function index(req, res) {
-    res.json(postsList)
+    const sql = 'SELECT * FROM posts'
+
+    connection.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: 'Errore nella query' })
+        res.json(results)
+    })
+    // res.json(postsList)
 }
 
 // SHOW
