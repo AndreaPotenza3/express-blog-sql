@@ -11,7 +11,6 @@ function index(req, res) {
         if (err) return res.status(500).json({ error: 'Errore nella query' })
         res.json(results)
     })
-    // res.json(postsList)
 }
 
 // SHOW
@@ -92,20 +91,27 @@ function modify(req, res) {
 // DELETE
 
 function destroy(req, res) {
-    const id = parseInt(req.params.id)
-    const postIndex = postsList.findIndex((post) => post.id === id)
 
-    if (postIndex === -1) {
-        res.status(404)
-        return res.json({
-            error: "Post not found",
-            message: "Post non trovato"
-        })
-    }
+    const sql = 'DELETE FROM posts WHERE id = ?'
+    const { id } = req.params
+    connection.query(sql, [id], (err) => {
+        if (err) return res.status(500).json({ error: 'non è stato possibile eliminare il post' })
+        res.sendStatus(204)
+    })
+    // const id = parseInt(req.params.id)
+    // const postIndex = postsList.findIndex((post) => post.id === id)
 
-    postsList.splice(postIndex, 1)
-    res.sendStatus(204)
-    console.log(postsList)
+    // if (postIndex === -1) {
+    //     res.status(404)
+    //     return res.json({
+    //         error: "Post not found",
+    //         message: "Post non trovato"
+    //     })
+    // }
+
+    // postsList.splice(postIndex, 1)
+    // res.sendStatus(204)
+    // console.log(postsList)
 
 }
 
